@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccessPulse AI – Curb Ramp & Sidewalk Accessibility Auditor</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Chart.js 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Slim Icon Sidebar matching the reference screenshot -->
+        <aside class="gis-sidebar" id="gisSidebar">
+            <div class="sidebar-top">
+                <a href="#dashboard" class="sidebar-emblem" title="AccessPulse AI">
+                    <div class="emblem-circle">
+                        <i class="fas fa-universal-access"></i>
+                    </div>
+                </a>
+
+                <nav class="sidebar-nav">
+                    <button class="nav-icon-btn active" data-view="dashboard" title="Dashboard">
+                        <i class="fas fa-home"></i>
+                    </button>
+                    <button class="nav-icon-btn" data-view="submit" title="Submit Audit Report">
+                        <i class="fas fa-plus-circle"></i>
+                    </button>
+                    <button class="nav-icon-btn" data-view="reports" title="Audits & Reports">
+                        <i class="fas fa-file-alt"></i>
+                    </button>
+                    <button class="nav-icon-btn" data-view="admin" title="Admin Review">
+                        <i class="fas fa-user-shield"></i>
+                    </button>
+                    <button class="nav-icon-btn" data-view="analytics" title="GIS Analytics">
+                        <i class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="nav-icon-btn" data-view="network" title="Azure Cloud Connectivity">
+                        <i class="fas fa-wifi"></i>
+                    </button>
+                    <button class="nav-icon-btn" data-view="settings" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom">
+                <button class="nav-icon-btn" title="Help & Documentation">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                <div class="user-avatar" title="Logged in as Priya Sharma (Facility Admin)">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Column -->
+        <div class="app-main">
+            <!-- Top Navigation Bar matching reference screenshot -->
+            <header class="gis-topbar">
+                <div class="topbar-left">
+                    <div class="topbar-tabs">
+                        <button class="tab-item" data-tab="sidewalk" onclick="switchCategoryTab('damaged_footpath')">Sidewalk</button>
+                        <button class="tab-item active" data-tab="curb_ramps" onclick="switchCategoryTab('blocked_ramp')">Curb Ramps</button>
+                        <button class="tab-item" data-tab="entrances" onclick="switchCategoryTab('inaccessible_entrance')">Entrances</button>
+                        <button class="tab-item" data-tab="signage" onclick="switchCategoryTab('missing_signage')">Signage</button>
+                        <button class="tab-item" data-tab="collection" onclick="switchCategoryTab('')">Collection</button>
+                    </div>
+                </div>
+
+                <div class="topbar-right">
+                    <!-- Export GeoJSON Button -->
+                    <button class="ward-chip" style="font-size:12px;padding:6px 12px;" onclick="downloadGeoJSON()" title="Download Esri/GIS GeoJSON callout layer">
+                        <i class="fas fa-file-download" style="color:var(--brand-blue);"></i>
+                        <span>Export GeoJSON</span>
+                    </button>
+
+                    <!-- Azure AI Badge -->
+                    <div class="azure-status-pill" onclick="openAzureModal()" style="cursor:pointer;" title="Click to view Azure AI Architecture & Pipeline Details">
+                        <i class="fab fa-microsoft"></i>
+                        <span>Azure Multimodal AI Active</span>
+                        <span class="live-dot"></span>
+                    </div>
+
+                    <button class="btn-primary-action" onclick="navigate('submit')">
+                        <i class="fas fa-plus"></i>
+                        <span>Report Issue</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dynamic Body View (Rendered by JS) -->
+            <main class="gis-body" id="mainBody">
+                <!-- Content injected dynamically -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals & Toasts -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <div class="modal-header">
+                <h3 id="modalTitle">Modal</h3>
+                <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
